@@ -1,18 +1,36 @@
 package main
 
+import (
+	"fmt"
+	"math/rand"
+	"os"
+	"time"
+
+	"github.com/mrombout/solorpg/dice"
+)
+
 func main() {
-	rand.Seed(time.Now().UnixNano())
+	diceNotation := "1d6"
+	if len(os.Args) > 1 {
+		diceNotation = os.Args[1]
+	}
 
-	rollDesc := strings.Join(os.Args[1:], " ")
-	res, reason, err := dice.Roll(rollDesc)
-
+	dice, err := dice.Parse(diceNotation)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v", err)
-	} else {
-		if reason != "" {
-			fmt.Printf("%s: ", reason)
-		}
-		fmt.Println(res)
-		fmt.Println(res.Description())
-}	
+		panic(err)
+	}
+
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	rolls := []int{}
+	for _, dice := range dice {
+		rolls = append(rolls, dice.Roll())
+	}
+
+	totalRoll := 0
+	for _, roll := range rolls {
+		totalRoll += roll
+	}
+
+	fmt.Println(totalRoll)
 }
