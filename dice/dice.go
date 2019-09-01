@@ -11,7 +11,8 @@ var diceRegexp = regexp.MustCompile(`(?P<num>\d+)?(?P<type>(?:d|d%|dF))(?P<faces
 
 // NumeralDie represents the most common die with even numeral sides.
 type NumeralDie struct {
-	faces int
+	faces  int
+	Result int
 }
 
 // Roll a die and return the result.
@@ -20,8 +21,13 @@ func (d *NumeralDie) Roll() int {
 		return 1
 	}
 
-	result := rand.Intn(d.faces - 1)
-	return result + 1
+	d.Result = rand.Intn(d.faces-1) + 1
+	return d.Result
+}
+
+// Type returns the type of the die in dice notation.
+func (d *NumeralDie) Type() string {
+	return fmt.Sprintf("d%d", d.faces)
 }
 
 // Parse parses a dice notation string and converts it to a slice of matching dice.

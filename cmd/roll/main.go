@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/mrombout/solorpg/dice"
@@ -22,15 +23,20 @@ func main() {
 
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	rolls := []int{}
-	for _, dice := range dice {
-		rolls = append(rolls, dice.Roll())
+	for key := range dice {
+		die := &dice[key]
+		die.Roll()
 	}
 
 	totalRoll := 0
-	for _, roll := range rolls {
-		totalRoll += roll
+	for _, dice := range dice {
+		totalRoll += dice.Result
 	}
 
-	fmt.Println(totalRoll)
+	rolls := []string{}
+	fmt.Printf("%d = ", totalRoll)
+	for _, dice := range dice {
+		rolls = append(rolls, fmt.Sprintf("%d[%s]", dice.Result, dice.Type()))
+	}
+	fmt.Println(strings.Join(rolls, " + "))
 }
