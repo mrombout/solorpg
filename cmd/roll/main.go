@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
 	"strings"
-	"time"
 
-	"github.com/mrombout/solorpg/dice"
+	"github.com/mrombout/solorpg/rollsvc"
 )
 
 func main() {
@@ -16,26 +14,16 @@ func main() {
 		diceNotation = os.Args[1]
 	}
 
-	dice, err := dice.Parse(diceNotation)
+	rollService := rollsvc.RollServiceImpl{}
+	result, err := rollService.Roll(diceNotation)
 	if err != nil {
-		panic(err)
-	}
-
-	rand.Seed(time.Now().UTC().UnixNano())
-
-	for key := range dice {
-		die := &dice[key]
-		die.Roll()
-	}
-
-	totalRoll := 0
-	for _, dice := range dice {
-		totalRoll += dice.Result
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 
 	rolls := []string{}
-	fmt.Printf("%d = ", totalRoll)
-	for _, dice := range dice {
+	fmt.Printf("%d = ", result.Result)
+	for _, dice := range result.Dice {
 		rolls = append(rolls, fmt.Sprintf("%d[%s]", dice.Result, dice.Type()))
 	}
 	fmt.Println(strings.Join(rolls, " + "))
