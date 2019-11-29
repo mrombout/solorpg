@@ -3,6 +3,7 @@ module github.com/mrombout/solorpg
 go 1.12
 
 require (
+	github.com/VividCortex/gohistogram v1.0.0 // indirect
 	github.com/go-kit/kit v0.9.0
 	github.com/gopherjs/gopherjs v0.0.0-20191106031601-ce3c9ade29de // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
