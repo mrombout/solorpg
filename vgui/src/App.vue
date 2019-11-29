@@ -1,17 +1,43 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <StoryViewer />
+    <StoryEditor/>
+    
+    <br />
+    <br />
+    <br />
+    Clicked: {{ $store.state.count }} times, count is {{ evenOrOdd }}
+    <button @click="increment">+</button>
+    <button @click="decrement">-</button>
+    <button @click="incrementIfOdd">Increment if odd</button>
+    <button @click="incrementAsync">Increment async</button>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import StoryEditor from './components/StoryEditor.vue'
+import StoryViewer from './components/StoryViewer.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'app',
+  computed: mapGetters([
+    'evenOrOdd'
+  ]),
+  methods: {
+    ...mapActions([
+      'increment',
+      'decrement',
+      'incrementIfOdd',
+      'incrementAsync'
+    ]),
+    onExecuteCommand() {
+      alert('execute command!')
+    }
+  },
   components: {
-    HelloWorld
+    StoryEditor,
+    StoryViewer
   }
 }
 </script>
