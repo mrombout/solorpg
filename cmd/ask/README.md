@@ -5,11 +5,11 @@ Ask me any question, and I will randomly give you an answers that you will have 
 ## Usage
 
 ```
-ask 50/50
+ask
 Yes
 ```
 
 ```
-ask u "Can I break this door with my axe?"
+ask +1
 Yes, but...
 ```
