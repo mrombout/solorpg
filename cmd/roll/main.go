@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mrombout/solorpg/rollsvc"
+	"github.com/mrombout/solorpg/backend/rollsvc"
 )
 
 func main() {

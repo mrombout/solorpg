@@ -20,7 +20,7 @@ func (d *NumeralDie) Roll() int {
 		return 1
 	}
 
-	d.Result = rand.Intn(d.Faces-1) + 1
+	d.Result = rand.Intn(d.Faces) + 1
 	return d.Result
 }
 
