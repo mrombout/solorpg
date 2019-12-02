@@ -1,0 +1,13 @@
+table: (1d3) The NPC is... [state]
+1. weary
+2. scary
+3. tough
+table: (1d6) The NPC is a... [role]
+1. knight
+2. man
+3. woman
+4. girl
+5. boy
+6. farmer
+>>>
+{{index . "state" | A | Capitalize}} {{index . "state"}} {{index . "role"}}

@@ -1,0 +1,4 @@
+generator = { tableDefinition };
+tableDefinition = "table:" "(" diceNotation ")" text "[" ident "]" newline option { newline option };
+diceNotation = ? dice notation ?;
+newline = ? all newline characters ?;

@@ -55,13 +55,13 @@ func TestRoll(t *testing.T) {
 		die          NumeralDie
 		expectedRoll int
 	}{
-		{seed: 1, die: NumeralDie{faces: 1}, expectedRoll: 1},
-		{seed: 2, die: NumeralDie{faces: 5}, expectedRoll: 3},
-		{seed: 3, die: NumeralDie{faces: 20}, expectedRoll: 17},
+		{seed: 1, die: NumeralDie{Faces: 1}, expectedRoll: 1},
+		{seed: 2, die: NumeralDie{Faces: 5}, expectedRoll: 3},
+		{seed: 3, die: NumeralDie{Faces: 20}, expectedRoll: 17},
 	}
 
 	for _, testCase := range testCases {
-		t.Run(string(testCase.die.faces), func(t *testing.T) {
+		t.Run(string(testCase.die.Faces), func(t *testing.T) {
 			rand.Seed(testCase.seed)
 			actualRoll := testCase.die.Roll()
 			if actualRoll != testCase.expectedRoll {
