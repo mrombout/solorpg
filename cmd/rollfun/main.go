@@ -1,13 +1,14 @@
 package main
 
 import (
+	"github.com/GoogleCloudPlatform/functions-framework-go/funcframework"
+	"github.com/mrombout/solorpg/backend/rollfun"
 	"log"
 	"os"
-	"github.com/GoogleCloudPlatform/functions-framework-go/funcframework"
 )
 
 func main() {
-	funcframework.RegisterHTTPFunction("/", Roll)
+	funcframework.RegisterHTTPFunction("/", rollfun.Roll)
 	// Use PORT environment variable, or default to 8080.
 	port := "8080"
 	if envPort := os.Getenv("PORT"); envPort != "" {

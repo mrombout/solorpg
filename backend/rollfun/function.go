@@ -1,4 +1,4 @@
-package main
+package rollfun
 
 import (
 	"encoding/json"
