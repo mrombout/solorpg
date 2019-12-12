@@ -3,10 +3,10 @@ module github.com/mrombout/solorpg
 go 1.12
 
 require (
+	github.com/GoogleCloudPlatform/functions-framework-go v0.3.0
 	github.com/VividCortex/gohistogram v1.0.0 // indirect
 	github.com/go-kit/kit v0.9.0
 	github.com/gopherjs/gopherjs v0.0.0-20191106031601-ce3c9ade29de // indirect
-	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/neelance/astrewrite v0.0.0-20160511093645-99348263ae86 // indirect
 	github.com/neelance/sourcemap v0.0.0-20151028013722-8c68805598ab // indirect
 	github.com/prometheus/client_golang v1.2.1

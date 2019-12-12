@@ -10,10 +10,11 @@ import (
 	"github.com/mrombout/solorpg/dice"
 )
 
+// MakeRollEndpoint creates a Roll endpoint for gRPC.
 func MakeRollEndpoint(service RollService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		rollRequest := request.(rollRequest)
-		result, err := service.Roll(rollRequest.DiceNotation)
+		result, err := service.Roll(rollRequest.DiceNotation, 0) // TODO: Use proper seed
 		if err != nil {
 			return rollResponse{0, []dice.NumeralDie{}, err.Error()}, nil
 		}
@@ -21,6 +22,7 @@ func MakeRollEndpoint(service RollService) endpoint.Endpoint {
 	}
 }
 
+// DecodeRollRequest decodes a roll request to from HTTP.
 func DecodeRollRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var request rollRequest
 
@@ -34,6 +36,7 @@ func DecodeRollRequest(_ context.Context, r *http.Request) (interface{}, error) 
 	return request, nil
 }
 
+// EncodeResponse encodes a roll response to JSON.
 func EncodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	return json.NewEncoder(w).Encode(response)
 }
