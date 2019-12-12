@@ -3,11 +3,13 @@ package rollfun
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mrombout/solorpg/backend/rollsvc"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/mrombout/solorpg/dice"
 )
 
 // Roll rolls one or more dice based on the given dice notation and returns the result.
@@ -32,12 +34,53 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	rollService := rollsvc.RollServiceImpl{}
-	result, err := rollService.Roll(diceNotation, seed)
+	result, err := roll(diceNotation, seed)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 
 	json.NewEncoder(w).Encode(result)
+}
+
+func roll(diceNotation string, seed int64) (RollResult, error) {
+	dice, err := dice.Parse(diceNotation)
+	if err != nil {
+		return emptyResult, err
+	}
+
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	for key := range dice {
+		die := &dice[key]
+		die.Roll()
+	}
+
+	totalRoll := 0
+	for _, dice := range dice {
+		totalRoll += dice.Result
+	}
+
+	return RollResult{
+		Result: totalRoll,
+		Dice:   dice,
+	}, nil
+}
+
+// RollResult contains the result of a single dice roll.
+type RollResult struct {
+	Result int
+	Dice   []dice.NumeralDie
+}
+
+var emptyResult = RollResult{}
+
+type rollRequest struct {
+	DiceNotation string
+}
+
+type rollResponse struct {
+	Result int
+	Dice   []dice.NumeralDie
+	Err    string
 }
