@@ -1,12 +1,15 @@
 <template>
   <div class="roll">
-    21 = <span class="dice">⚀ ⚁ ⚂ ⚃ ⚄ ⚅</span>
+    {{result.Result}} = <span class="dice">⚀ ⚁ ⚂ ⚃ ⚄ ⚅</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Roll'
+  name: 'Roll',
+  props: {
+    result: Object,
+  }
 }
 </script>
 

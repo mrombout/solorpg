@@ -1,6 +1,7 @@
 <template>
   <div class="viewer">
-    <component :is="event.type" v-for="event in events" :key="event.type" :text="event.text" />
+    <Say text="Hiya" />
+    <component :is="event.type" v-for="event in events" :key="event.id + '_' + event.type" :text="event.text" :result="event" />
   </div>
 </template>
 

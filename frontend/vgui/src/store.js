@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Axios from 'axios'
 
 Vue.use(Vuex)
 
 const state = {
-    count: 0,
     activeStory: {
         name: 'A story name',
         events: [
@@ -14,11 +14,11 @@ const state = {
             },
             {
                 type: 'roll',
-                total: 21,
-                dice: [
+                Result: 21,
+                Dice: [
                     {
-                        faces: 6,
-                        result: 1
+                        Faces: 6,
+                        Result: 1
                     },
                     {
                         faces: 6,
@@ -55,14 +55,16 @@ const state = {
 }
 
 const mutations = {
-    increment(state) {
-        state.count++
-    },
-    decrement(state) {
-        state.count--
-    },
     addSay(state, payload) {
         let events = [...state.activeStory.events]
+        payload.id = new Date().getTime()
+        events.push(payload)
+
+        Vue.set(state.activeStory, 'events', events)
+    },
+    addRoll(state, payload) {
+        let events = [...state.activeStory.events]
+        payload.id = new Date().getTime()
         events.push(payload)
 
         Vue.set(state.activeStory, 'events', events)
@@ -70,33 +72,22 @@ const mutations = {
 }
 
 const actions = {
-    increment: ({commit}) => commit('increment'),
-    decrement: ({commit}) => commit('decrement'),
-    incrementIfOdd ({commit, state}) {
-        if ((state.count + 1) % 2 == 0) {
-            commit('increment')
-        }
-    },
-    incrementAsync({commit}) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                commit('increment')
-                resolve()
-            }, 1000)
-        })
-    },
     addSay({commit}, payload) {
         commit('addSay', payload)
+    },
+    addRoll({commit}) {
+        Axios
+            .get('https://us-central1-cloud-gm-zargon.cloudfunctions.net/roll')
+            .then(response => {
+                let payload = response.data
+                payload.type = 'roll'
+                commit('addRoll', payload)
+            })
     }
 }
 
-const getters = {
-    evenOrOdd: state => state.count % 2 === 0 ? 'even' : 'odd'
-}
-
 export default new Vuex.Store({
-    state,
-    getters,
-    actions,
-    mutations
+    state: state,
+    actions: actions,
+    mutations: mutations
 })

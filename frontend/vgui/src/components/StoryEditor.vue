@@ -14,12 +14,12 @@ export default {
   },
   methods: {
     onSubmit: function() {
-      this.command = ''
       this.$emit('execute-command')
       this.$store.dispatch('addSay', {
         type: 'say',
         text: this.command
       })
+      this.command = ''
     }
   }
 }

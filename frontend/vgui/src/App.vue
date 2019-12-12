@@ -6,31 +6,21 @@
     <br />
     <br />
     <br />
-    Clicked: {{ $store.state.count }} times, count is {{ evenOrOdd }}
-    <button @click="increment">+</button>
-    <button @click="decrement">-</button>
-    <button @click="incrementIfOdd">Increment if odd</button>
-    <button @click="incrementAsync">Increment async</button>
+    <button @click="addRoll">Roll</button>
+    <button @click="addAsk">Ask</button>
   </div>
 </template>
 
 <script>
 import StoryEditor from './components/StoryEditor.vue'
 import StoryViewer from './components/StoryViewer.vue'
-import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'app',
-  computed: mapGetters([
-    'evenOrOdd'
-  ]),
   methods: {
-    ...mapActions([
-      'increment',
-      'decrement',
-      'incrementIfOdd',
-      'incrementAsync'
-    ]),
+    addRoll() {
+      this.$store.dispatch('addRoll')
+    },
     onExecuteCommand() {
       alert('execute command!')
     }
