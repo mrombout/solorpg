@@ -1,37 +1,12 @@
 <template>
   <div id="app">
-    <StoryViewer />
-    <StoryEditor/>
-    
-    <br />
-    <br />
-    <br />
-    <button @click="addRoll">Roll</button>
-    <button @click="addAsk">Ask</button>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import StoryEditor from './components/StoryEditor.vue'
-import StoryViewer from './components/StoryViewer.vue'
-
 export default {
-  name: 'app',
-  methods: {
-    addRoll() {
-      this.$store.dispatch('addRoll')
-    },
-    addAsk() {
-
-    },
-    onExecuteCommand() {
-      alert('execute command!')
-    }
-  },
-  components: {
-    StoryEditor,
-    StoryViewer
-  }
+  name: 'app'
 }
 </script>
 

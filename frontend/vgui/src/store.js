@@ -5,6 +5,8 @@ import Axios from 'axios'
 Vue.use(Vuex)
 
 const state = {
+    currentUser: null,
+    userProfile: {},
     activeStory: {
         name: 'A story name',
         events: [
@@ -68,6 +70,12 @@ const mutations = {
         events.push(payload)
 
         Vue.set(state.activeStory, 'events', events)
+    },
+    setCurrentUser(state, val) {
+        state.currentUser = val
+    },
+    setUserProfile(state, val) {
+        state.userProfile = val
     }
 }
 
@@ -83,6 +91,9 @@ const actions = {
                 payload.type = 'roll'
                 commit('addRoll', payload)
             })
+    },
+    fetchUserProfile() {
+        
     }
 }
 
