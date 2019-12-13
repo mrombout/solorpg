@@ -1,17 +1,34 @@
 <template>
   <div id="app">
-    <TitleBar></TitleBar>
+    <TitleBar>
+      VGUI <a v-if="currentUser" @click="logout" href="#">| Logout</a>
+    </TitleBar>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import TitleBar from './components/TitleBar'
+import { mapState } from 'vuex'
+const fb = require('./firebaseConfig.js')
 
 export default {
   name: 'app',
   components: {
     TitleBar
+  },
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  methods: {
+    logout() {
+      fb.auth.signOut().then(() => {
+          this.$store.dispatch('clearData')
+          this.$router.push('/login')
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   }
 }
 </script>

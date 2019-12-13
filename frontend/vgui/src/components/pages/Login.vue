@@ -33,7 +33,7 @@ export default {
         password: '',
       },
       performingRequest: false,
-      errorMSg: '',
+      errorMsg: '',
     }
   },
   methods: {

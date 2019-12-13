@@ -1,6 +1,6 @@
 <template>
   <div class="titlebar">
-    Titlebar
+    <slot></slot>
   </div>
 </template>
 
@@ -17,6 +17,6 @@ export default {
 <style scoped>
 
 .titlebar {
-  background-color: #330033;
+  background-color: #AAAAEE;
 }
 </style>

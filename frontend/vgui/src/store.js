@@ -1,8 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Axios from 'axios'
+const fb = require('./firebaseConfig.js')
 
 Vue.use(Vuex)
+
+fb.auth.onAuthStateChanged(user => {
+    if (user) {
+        store.commit('setCurrentUser', user)
+        store.dispatch('fetchUserProfile')
+    }
+})
 
 const state = {
     currentUser: null,
@@ -76,7 +84,7 @@ const mutations = {
     },
     setUserProfile(state, val) {
         state.userProfile = val
-    }
+    },
 }
 
 const actions = {
@@ -94,11 +102,16 @@ const actions = {
     },
     fetchUserProfile() {
         
+    },
+    clearData({ commit }) {
+        commit('setCurrentUser', null)
+        commit('setUserProfile', {})
     }
 }
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
     state: state,
     actions: actions,
     mutations: mutations
 })
+export default store
