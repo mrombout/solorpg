@@ -2,11 +2,21 @@
   <div class="hello">
     <h1>Login</h1>
     <form>
+      <transition name="fade">
+        <div v-if="performingRequest" class="loading">
+          <p>Loading...</p>
+        </div>
+      </transition>
       <label for="email">Email</label>
       <input type="text" placeholder="you@email.com" id="email" v-model.trim="loginForm.email" />
       <label for="password">Password</label>
       <input type="password" placeholder="********" id="password" v-model.trim="loginForm.password" />
-      <button @click="login">Log in</button>
+      <button type="button" @click="login">Log in</button>
+      <transition name="fade">
+        <div v-if="errorMsg != ''" class="error-msg">
+          <p>{{ errorMsg }}</p>
+        </div>
+      </transition>
     </form>
   </div>
 </template>
@@ -21,20 +31,25 @@ export default {
       loginForm: {
         email: '',
         password: '',
-      }
+      },
+      performingRequest: false,
+      errorMSg: '',
     }
-  },
-  props: {
-    msg: String
   },
   methods: {
     login: function() {
+      this.performingRequest = true
+
       fb.auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password).then(user => {
         this.$store.commit('setCurrentUser', user)
         this.$store.dispatch('fetchUserProfile')
         this.$router.push('/editor')
+
+        this.performingRequest = false
       }).catch(err => {
         console.log(err)
+        this.performingRequest = false
+        this.errorMsg = err.message
       })
     }
   }

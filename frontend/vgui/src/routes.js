@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import firebase from 'firebase'
 
 import Index from './components/pages/Index.vue'
 import Login from './components/pages/Login.vue'
 import Editor from './components/pages/Editor.vue'
 
-const fb = require('./firebaseConfig.js')
-
 Vue.use(VueRouter)
 
 const router = new VueRouter({
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -25,22 +25,22 @@ const router = new VueRouter({
             meta: {
                 requiresAuth: true,
             }
-        }
+        },
+        { path: '*', redirect: '/' }
     ]
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.path == '/login') {
-        next()
-        return
-    }
+    const requiresAuth  = to.matched.some(x => x.meta.requiresAuth)
+    const currentUser = firebase.auth().currentUser
 
-    if (fb.auth.currentUser == null) {
+    if (requiresAuth && !currentUser) {
         next('/login')
-        return
+    } else if (requiresAuth && currentUser) {
+        next()
+    } else {
+        next()
     }
-
-    next()
 })
 
 export default router
