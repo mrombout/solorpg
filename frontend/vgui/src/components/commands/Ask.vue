@@ -14,5 +14,8 @@ export default {
 </script>
 
 <style scoped>
-
+.ask {
+  border: 1px solid black;
+  margin: 2px;
+}
 </style>

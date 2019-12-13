@@ -21,6 +21,9 @@ export default {
     addRoll() {
       this.$store.dispatch('addRoll')
     },
+    addAsk() {
+
+    },
     onExecuteCommand() {
       alert('execute command!')
     }

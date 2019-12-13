@@ -14,5 +14,8 @@ export default {
 </script>
 
 <style scoped>
-
+.say {
+  border: 1px solid green;
+  margin: 2px;
+}
 </style>

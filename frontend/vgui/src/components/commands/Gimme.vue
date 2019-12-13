@@ -14,5 +14,8 @@ export default {
 </script>
 
 <style scoped>
-
+.gimme {
+  border: 1px solid red;
+  margin: 2px;
+}
 </style>

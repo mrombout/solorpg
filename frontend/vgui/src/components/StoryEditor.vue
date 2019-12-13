@@ -26,8 +26,7 @@ export default {
 </script>
 
 <style scoped>
-.editor textarea {
-  width: 800px;
-  height: 100px;
+.editor input[type="text"] {
+  width: 100%;
 }
 </style>

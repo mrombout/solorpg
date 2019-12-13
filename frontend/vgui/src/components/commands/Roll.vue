@@ -16,6 +16,8 @@ export default {
 <style scoped>
 .roll {
   font-size: 21px;
+  border: 1px solid blue;
+  margin: 2px;
 }
 
 .roll .dice {
