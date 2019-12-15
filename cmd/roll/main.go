@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
-	"github.com/mrombout/solorpg/backend/rollsvc"
+	"github.com/mrombout/solorpg/dice"
 )
 
 func main() {
@@ -14,8 +15,8 @@ func main() {
 		diceNotation = os.Args[1]
 	}
 
-	rollService := rollsvc.RollServiceImpl{}
-	result, err := rollService.Roll(diceNotation)
+	seed := time.Now().UTC().UnixNano()
+	result, err := dice.Roll(diceNotation, seed)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
