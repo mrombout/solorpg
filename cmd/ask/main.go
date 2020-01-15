@@ -2,11 +2,16 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"math/rand"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/mrombout/solorpg/ask"
 )
+
+var output io.Writer = os.Stdout
 
 func main() {
 	modifier := "+0"
@@ -15,14 +20,16 @@ func main() {
 	}
 
 	if len(modifier) < 2 {
-		fmt.Println("modifier not in format <+|-><number>")
+		fmt.Fprintln(output, "modifier not in format <+|-><number>")
 		os.Exit(1)
 	}
 
 	modifierInt, err := strconv.Atoi(modifier)
 	if err != nil {
-		fmt.Println("modified not a valid number")
+		fmt.Fprintln(output, "modifier not a valid number")
+		os.Exit(1)
 	}
 
-	fmt.Println(ask.Ask(modifierInt))
+	rand.Seed(time.Now().UTC().UnixNano())
+	fmt.Fprintln(output, ask.Ask(modifierInt))
 }
