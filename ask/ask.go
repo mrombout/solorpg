@@ -1,8 +1,7 @@
 package ask
 
 import (
-	"math/rand"
-	"time"
+	"math"
 
 	"github.com/mrombout/solorpg/dice"
 )
@@ -23,13 +22,11 @@ func Ask(modifier int) string {
 			Faces: 6,
 		},
 	}
-	for i := 0; i < modifier; i++ {
+	for i := 0.0; i < math.Abs(float64(modifier)); i++ {
 		diceArr = append(diceArr, dice.NumeralDie{
 			Faces: 6,
 		})
 	}
-
-	rand.Seed(time.Now().UTC().UnixNano())
 
 	var highestRoll dice.NumeralDie
 	var lowestRoll dice.NumeralDie
