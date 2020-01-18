@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
-	"strings"
+	"regexp"
 	"testing"
 
 	"github.com/mrombout/solorpg/assert"
 )
+
+var validAskResponseRegexp = `(Yes|No).*(and|but)?\n`
+var validAskResponse = regexp.MustCompile(validAskResponseRegexp)
 
 func TestMain_GeneratesResponse(t *testing.T) {
 	testCases := map[string]struct {
@@ -21,18 +24,10 @@ func TestMain_GeneratesResponse(t *testing.T) {
 
 	for name, testCase := range testCases {
 		t.Run(name, func(t *testing.T) {
-			// Arrange
-			var output bytes.Buffer
-
-			askCommand := exec.Command("ask", testCase.args...)
-			askCommand.Stdout = &output
-
-			// Act
-			err := askCommand.Run()
-
-			// Assert
-			assert.Nil(t, err)
-			assert.NotEmpty(t, output.String())
+			givenAskIsInstalled()
+			actualOutput, actualError := whenCommandIsRun("ask", testCase.args)
+			thenItExitsWithStatusCode(t, actualError, 0)
+			thenItOutputsAValidAskResult(t, actualOutput)
 		})
 	}
 }
@@ -43,8 +38,8 @@ func TestMain_HandlesInvalidArguments(t *testing.T) {
 		expectedOutput     string
 		expectedExitStatus int
 	}{
-		"no +/- on modifier":    {args: []string{"1"}, expectedOutput: "modifier not in format <+|-><number>", expectedExitStatus: 1},
-		"modifier not a number": {args: []string{"forty"}, expectedOutput: "modifier not a valid number", expectedExitStatus: 1},
+		"no +/- on modifier":    {args: []string{"1"}, expectedOutput: "modifier not in format <+|-><number>\n", expectedExitStatus: 1},
+		"modifier not a number": {args: []string{"forty"}, expectedOutput: "modifier not a valid number\n", expectedExitStatus: 1},
 	}
 
 	for name, testCase := range testCases {
@@ -52,7 +47,7 @@ func TestMain_HandlesInvalidArguments(t *testing.T) {
 			givenAskIsInstalled()
 			actualOutput, actualError := whenCommandIsRun("ask", testCase.args)
 			thenItExitsWithStatusCode(t, actualError, testCase.expectedExitStatus)
-			thenItOutputsAValidAskResult(t, actualOutput, testCase.expectedOutput)
+			thenItOutputsAnErrorMessage(t, actualOutput, testCase.expectedOutput)
 		})
 	}
 }
@@ -73,10 +68,26 @@ func whenCommandIsRun(command string, args []string) (bytes.Buffer, error) {
 }
 
 func thenItExitsWithStatusCode(t *testing.T, actualError error, expectedExitStatus int) {
-	assert.EqualError(t, actualError, fmt.Sprintf("exit status %d", expectedExitStatus))
+	t.Helper()
+
+	if expectedExitStatus == 0 {
+		assert.Nil(t, actualError)
+	} else {
+		assert.EqualError(t, actualError, fmt.Sprintf("exit status %d", expectedExitStatus))
+	}
 }
 
-func thenItOutputsAValidAskResult(t *testing.T, actualOutput bytes.Buffer, expectedOutput string) {
-	// TODO: Actually verify if output is valid
-	assert.Equal(t, expectedOutput, strings.Trim(actualOutput.String(), "\n"))
+func thenItOutputsAValidAskResult(t *testing.T, actualOutput bytes.Buffer) {
+	t.Helper()
+
+	actualOutputBytes := actualOutput.Bytes()
+	if !validAskResponse.Match(actualOutputBytes) {
+		t.Errorf("expected '%v' to match regular expression '%v', but it didn't", string(actualOutputBytes), validAskResponseRegexp)
+	}
+}
+
+func thenItOutputsAnErrorMessage(t *testing.T, actualOutput bytes.Buffer, expectedOutput string) {
+	t.Helper()
+
+	assert.Equal(t, expectedOutput, actualOutput.String())
 }
