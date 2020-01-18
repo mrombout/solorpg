@@ -6,14 +6,14 @@ import "math/rand"
 func RollMany(rng *rand.Rand, dice []NumeralDie) int {
 	totalResult := 0
 
-	for _, die := range dice {
-		totalResult += die.Roll(rng)
+	for i := 0; i < len(dice); i++ {
+		totalResult += dice[i].Roll(rng)
 	}
 
 	return totalResult
 }
 
 // RollOne rolls a single die and returns the result.
-func RollOne(rng *rand.Rand, die NumeralDie) int {
+func RollOne(rng *rand.Rand, die *NumeralDie) int {
 	return die.Roll(rng)
 }
