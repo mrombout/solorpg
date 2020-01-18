@@ -11,7 +11,6 @@ Initializes a directory to be used as a Zargon story.
 Based on your configuration is will download a number of random generators for `npcs`, `quests`, `items` and `places` based on the given theme.
 This means that each time your run `zargon init` you'll set an entirely different adventure!
 
-
 Note that Zargon GM works with any plain text file, anywhere on your disk, in any file structure.
 The `zargon init` command is strictly a convenience and not in any way a neccesity.
 
@@ -28,7 +27,6 @@ $ tree
 │   ├── quest.gen
 │   ├── item.gen
 │   └── place.gen
-
 ```
 
 ### `zargon gen`
@@ -58,4 +56,13 @@ $ zargon gen install --help
 usage: zargon gen install [options] generator_name
     options:
         -o, --output_dir    directory to download the generator to, defaults to `./gen`
+```
+
+#### `zargon gen uninstall`
+
+Uninstalls an installed generator.
+
+```
+$ zargon gen uninstall --help
+usage: zargon gen uninstall generator_name
 ```
