@@ -49,18 +49,34 @@ func TestMain_HandlesInvalidArguments(t *testing.T) {
 
 	for name, testCase := range testCases {
 		t.Run(name, func(t *testing.T) {
-			// Arrange
-			var output bytes.Buffer
-
-			askCommand := exec.Command("ask", testCase.args...)
-			askCommand.Stdout = &output
-
-			// Act
-			err := askCommand.Run()
-
-			// Assert
-			assert.EqualError(t, err, fmt.Sprintf("exit status %d", testCase.expectedExitStatus))
-			assert.Equal(t, testCase.expectedOutput, strings.Trim(output.String(), "\n"))
+			givenAskIsInstalled()
+			actualOutput, actualError := whenCommandIsRun("ask", testCase.args)
+			thenItExitsWithStatusCode(t, actualError, testCase.expectedExitStatus)
+			thenItOutputsAValidAskResult(t, actualOutput, testCase.expectedOutput)
 		})
 	}
+}
+
+func givenAskIsInstalled() {
+	// TODO: Install ask command
+}
+
+func whenCommandIsRun(command string, args []string) (bytes.Buffer, error) {
+	var output bytes.Buffer
+
+	askCommand := exec.Command(command, args...)
+	askCommand.Stdout = &output
+
+	err := askCommand.Run()
+
+	return output, err
+}
+
+func thenItExitsWithStatusCode(t *testing.T, actualError error, expectedExitStatus int) {
+	assert.EqualError(t, actualError, fmt.Sprintf("exit status %d", expectedExitStatus))
+}
+
+func thenItOutputsAValidAskResult(t *testing.T, actualOutput bytes.Buffer, expectedOutput string) {
+	// TODO: Actually verify if output is valid
+	assert.Equal(t, expectedOutput, strings.Trim(actualOutput.String(), "\n"))
 }
