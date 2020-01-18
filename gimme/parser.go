@@ -137,8 +137,12 @@ func (p *Parser) parseDiceNotation(stack *tokenStack) ([]dice.NumeralDie, error)
 		return []dice.NumeralDie{}, err
 	}
 
-	// TODO: Use a different package to parse the dice notation
-	_, err = acceptToken(stack, diceNotation)
+	diceNotationToken, err := acceptToken(stack, diceNotation)
+	if err != nil {
+		return []dice.NumeralDie{}, err
+	}
+
+	diceSet, err := dice.Parse(diceNotationToken.value)
 	if err != nil {
 		return []dice.NumeralDie{}, err
 	}
@@ -148,7 +152,7 @@ func (p *Parser) parseDiceNotation(stack *tokenStack) ([]dice.NumeralDie, error)
 		return []dice.NumeralDie{}, err
 	}
 
-	return []dice.NumeralDie{}, nil
+	return diceSet, nil
 }
 
 func (p *Parser) parseOptions(stack *tokenStack) ([]option, error) {

@@ -289,7 +289,9 @@ func TestParseTableValid(t *testing.T) {
 	tokenStack := tokenStack{
 		tokens: []token{
 			token{typ: tableStart},
+			token{typ: diceNotationStart},
 			token{typ: diceNotation, value: `1d6`},
+			token{typ: diceNotationEnd},
 			token{typ: text, value: `The NPC is a...`},
 			token{typ: variableAssignmentStart},
 			token{typ: ident, value: `occupation`},
@@ -304,7 +306,7 @@ func TestParseTableValid(t *testing.T) {
 	_, err := parser.parseTable(&tokenStack)
 
 	if err != nil {
-		t.Errorf("unexpected error %v returned by parseTable(), expected nil", err)
+		t.Errorf("unexpected error %q returned by parseTable(), expected nil", err)
 	}
 
 	// TODO: More assertions
@@ -428,7 +430,9 @@ func TestParseTablesValid(t *testing.T) {
 	tokenStack := tokenStack{
 		tokens: []token{
 			token{typ: tableStart},
+			token{typ: diceNotationStart},
 			token{typ: diceNotation, value: `1d6`},
+			token{typ: diceNotationEnd},
 			token{typ: text, value: `The NPC is a...`},
 			token{typ: variableAssignmentStart},
 			token{typ: ident, value: `occupation`},
@@ -438,7 +442,9 @@ func TestParseTablesValid(t *testing.T) {
 			token{typ: optionNumber},
 			token{typ: text, value: `Mage`},
 			token{typ: tableStart},
+			token{typ: diceNotationStart},
 			token{typ: diceNotation, value: `1d6`},
+			token{typ: diceNotationEnd},
 			token{typ: text, value: `The NPC is a...`},
 			token{typ: variableAssignmentStart},
 			token{typ: ident, value: `occupation`},
@@ -453,7 +459,7 @@ func TestParseTablesValid(t *testing.T) {
 	err := parser.parseTables(&tokenStack, &generator)
 
 	if err != nil {
-		t.Errorf("unexpected error %v returned by parseTables(), expected nil", err)
+		t.Errorf("unexpected error %q returned by parseTables(), expected nil", err)
 	}
 
 	// TODO: More assertions
@@ -511,7 +517,9 @@ func TestParseValid(t *testing.T) {
 	parser := NewParser(nil)
 	tokens := []token{
 		token{typ: tableStart},
+		token{typ: diceNotationStart},
 		token{typ: diceNotation, value: `1d6`},
+		token{typ: diceNotationEnd},
 		token{typ: text, value: `The NPC is a...`},
 		token{typ: variableAssignmentStart},
 		token{typ: ident, value: `occupation`},
@@ -521,7 +529,9 @@ func TestParseValid(t *testing.T) {
 		token{typ: optionNumber},
 		token{typ: text, value: `Mage`},
 		token{typ: tableStart},
+		token{typ: diceNotationStart},
 		token{typ: diceNotation, value: `1d6`},
+		token{typ: diceNotationEnd},
 		token{typ: text, value: `The NPC is a...`},
 		token{typ: variableAssignmentStart},
 		token{typ: ident, value: `occupation`},
