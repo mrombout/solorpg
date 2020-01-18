@@ -3,6 +3,8 @@ package assert
 import "testing"
 
 func EqualError(t *testing.T, actualError error, expectedErrorStr string) {
+	t.Helper()
+
 	actualErrorStr := "nil"
 	if actualError != nil {
 		actualErrorStr = actualError.Error()
