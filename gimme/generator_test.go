@@ -1,13 +1,13 @@
 package gimme
 
 import (
+	"math/rand"
 	"testing"
 
 	"github.com/mrombout/solorpg/dice"
 )
 
 func TestGenerate(t *testing.T) {
-	// TODO: Seeded
 	template, err := templateParser{}.Parse(`{{index . "race" | A | Capitalize}} {{index . "race"}} {{index . "occupation"}}`)
 	if err != nil {
 		t.Fatal(err)
@@ -17,7 +17,7 @@ func TestGenerate(t *testing.T) {
 		tables: []table{
 			table{
 				diceSet: []dice.NumeralDie{
-					dice.NumeralDie{Faces: 6},
+					dice.NumeralDie{Faces: 2},
 				},
 				options: []option{
 					option{text: "orcish"},
@@ -28,7 +28,7 @@ func TestGenerate(t *testing.T) {
 			},
 			table{
 				diceSet: []dice.NumeralDie{
-					dice.NumeralDie{Faces: 6},
+					dice.NumeralDie{Faces: 2},
 				},
 				options: []option{
 					option{text: "warrior"},
@@ -39,6 +39,7 @@ func TestGenerate(t *testing.T) {
 			},
 		},
 		template: template,
+		rng:      rand.New(rand.NewSource(0)),
 	}
 
 	actualResult, err := generator.Generate()

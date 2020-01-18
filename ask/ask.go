@@ -2,6 +2,7 @@ package ask
 
 import (
 	"math"
+	"math/rand"
 
 	"github.com/mrombout/solorpg/dice"
 )
@@ -16,7 +17,7 @@ var results = map[int]string{
 }
 
 // Ask returns a response to a yes/no question, and possibly a consequence.
-func Ask(modifier int) string {
+func Ask(rng *rand.Rand, modifier int) string {
 	diceArr := []dice.NumeralDie{
 		dice.NumeralDie{
 			Faces: 6,
@@ -31,7 +32,7 @@ func Ask(modifier int) string {
 	var highestRoll dice.NumeralDie
 	var lowestRoll dice.NumeralDie
 	for _, dice := range diceArr {
-		result := dice.Roll()
+		result := dice.Roll(rng)
 		if result > highestRoll.Result {
 			highestRoll = dice
 		}

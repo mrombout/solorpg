@@ -1,22 +1,19 @@
 package dice
 
-import "fmt"
+import "math/rand"
 
 // RollMany rolls one or more dice and returns the total result.
-func RollMany(dice []NumeralDie) int {
+func RollMany(rng *rand.Rand, dice []NumeralDie) int {
 	totalResult := 0
 
-	fmt.Println(dice)
 	for _, die := range dice {
-		fmt.Println(die)
-		totalResult += die.Roll()
+		totalResult += die.Roll(rng)
 	}
 
-	fmt.Println(totalResult)
 	return totalResult
 }
 
 // RollOne rolls a single die and returns the result.
-func RollOne(die NumeralDie) int {
-	return die.Roll()
+func RollOne(rng *rand.Rand, die NumeralDie) int {
+	return die.Roll(rng)
 }

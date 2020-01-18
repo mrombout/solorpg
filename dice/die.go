@@ -15,12 +15,12 @@ type NumeralDie struct {
 }
 
 // Roll a die and return the result.
-func (d *NumeralDie) Roll() int {
+func (d *NumeralDie) Roll(rng *rand.Rand) int {
 	if d.Faces == 1 {
 		return 1
 	}
 
-	d.Result = rand.Intn(d.Faces) + 1
+	d.Result = rng.Intn(d.Faces) + 1
 	return d.Result
 }
 

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"strings"
 	"text/template"
 
@@ -14,6 +15,7 @@ import (
 type Generator struct {
 	tables   []table
 	template *template.Template
+	rng      *rand.Rand
 }
 
 type table struct {
@@ -28,7 +30,7 @@ type option struct {
 }
 
 // NewGenerator creates a new generator based on the given file.
-func NewGenerator(generatorFileName string) (Generator, error) {
+func NewGenerator(generatorFileName string, seed int64) (Generator, error) {
 	content, err := ioutil.ReadFile(generatorFileName)
 	if err != nil {
 		return Generator{}, err
@@ -45,6 +47,8 @@ func NewGenerator(generatorFileName string) (Generator, error) {
 	if err != nil {
 		return Generator{}, err
 	}
+
+	generator.rng = rand.New(rand.NewSource(seed))
 
 	return generator, nil
 }
@@ -73,12 +77,12 @@ func (g *Generator) Generate() (string, error) {
 }
 
 func (g *Generator) resolveTable(table table) (string, error) {
-	rollResult := dice.RollMany(table.diceSet)
+	rollResult := dice.RollMany(g.rng, table.diceSet)
 	numOptions := len(table.options)
 
 	if rollResult > numOptions {
 		return "", fmt.Errorf("rolled %d, but there are only %d options", rollResult, len(table.options))
 	}
 
-	return table.options[rollResult].text, nil
+	return table.options[rollResult-1].text, nil
 }

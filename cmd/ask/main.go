@@ -30,6 +30,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	rand.Seed(time.Now().UTC().UnixNano())
-	fmt.Fprintln(output, ask.Ask(modifierInt))
+	rng := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
+	fmt.Fprintln(output, ask.Ask(rng, modifierInt))
 }

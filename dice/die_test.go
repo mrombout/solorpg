@@ -62,8 +62,8 @@ func TestRoll(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(string(testCase.die.Faces), func(t *testing.T) {
-			rand.Seed(testCase.seed)
-			actualRoll := testCase.die.Roll()
+			rng := rand.New(rand.NewSource(testCase.seed))
+			actualRoll := testCase.die.Roll(rng)
 			if actualRoll != testCase.expectedRoll {
 				t.Errorf("expected a roll of %d, but rolled %d", testCase.expectedRoll, actualRoll)
 			}

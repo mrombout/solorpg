@@ -2,21 +2,18 @@ package dice
 
 import (
 	"math/rand"
-	"time"
 )
 
 // Roll rolls the dice given in the dice notation.
-func Roll(diceNotation string, seed int64) (RollResult, error) {
+func Roll(rng *rand.Rand, diceNotation string) (RollResult, error) {
 	dice, err := Parse(diceNotation)
 	if err != nil {
 		return emptyResult, err
 	}
 
-	rand.Seed(time.Now().UTC().UnixNano())
-
 	for key := range dice {
 		die := &dice[key]
-		die.Roll()
+		die.Roll(rng)
 	}
 
 	totalRoll := 0
