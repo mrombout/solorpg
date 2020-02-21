@@ -52,19 +52,17 @@ func lex(scanner scanner) ([]token, error) {
 		var currentTokens = []token{}
 		switch {
 		case isTableDefinition(line):
-			currentTokens = lexTableDefinition(line)
+			currentTokens = lexTableDefinition(line, &lineNo)
 		case isTableOption(line):
-			currentTokens = lexTableOption(line)
+			currentTokens = lexTableOption(line, &lineNo)
 		case isTemplateStart(line):
-			currentTokens = lexTemplateStart(scanner)
+			currentTokens = lexTemplateStart(scanner, &lineNo)
 		}
 
 		for _, currentToken := range currentTokens {
-			currentToken.line = lineNo
+			//currentToken.line = lineNo
 			tokens = append(tokens, currentToken)
 		}
-
-		lineNo++
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -78,40 +76,51 @@ func isTableDefinition(line string) bool {
 	return strings.HasPrefix(line, "table:")
 }
 
-func lexTableDefinition(line string) []token {
+func lexTableDefinition(line string, lineNo *int) []token {
 	submatches := tableDefinitionRegex.FindSubmatch([]byte(line))
 
 	diceNotationVal := submatches[2]
 	tableName := submatches[3]
 	variableName := submatches[4]
 
+	currentLine := *lineNo
+	(*lineNo)++
+
 	return []token{
 		token{
-			typ: tableStart,
+			typ:  tableStart,
+			line: currentLine,
 		},
 		token{
-			typ: diceNotationStart,
+			typ:  diceNotationStart,
+			line: currentLine,
 		},
 		token{
 			typ:   diceNotation,
 			value: string(diceNotationVal),
+			line:  currentLine,
 		},
 		token{
-			typ: diceNotationEnd,
+			typ:  diceNotationEnd,
+			line: currentLine,
 		},
 		token{
 			typ:   text,
 			value: string(tableName),
+			line:  currentLine,
 		},
 		token{
-			typ: variableAssignmentStart,
+			typ:  variableAssignmentStart,
+			line: currentLine,
 		},
 		token{
 			typ:   ident,
 			value: string(variableName),
+			line:  currentLine,
 		},
 		token{
-			typ: variableAssignmentEnd,
+			typ:  variableAssignmentEnd,
+			line: currentLine,
 		},
 	}
 }
@@ -121,20 +130,25 @@ func isTableOption(line string) bool {
 	return unicode.IsDigit(r)
 }
 
-func lexTableOption(line string) []token {
+func lexTableOption(line string, lineNo *int) []token {
 	submatches := optionDefinitionRegex.FindSubmatch([]byte(line))
 
 	optionNumberVal := submatches[1]
 	optionText := submatches[2]
 
+	currentLine := *lineNo
+	(*lineNo)++
+
 	return []token{
 		token{
 			typ:   optionNumber,
 			value: string(optionNumberVal),
+			line:  currentLine,
 		},
 		token{
 			typ:   text,
 			value: string(optionText),
+			line:  currentLine,
 		},
 	}
 }
@@ -143,7 +157,7 @@ func isTemplateStart(line string) bool {
 	return line == ">>>"
 }
 
-func lexTemplateStart(scanner scanner) []token {
+func lexTemplateStart(scanner scanner, lineNo *int) []token {
 	template := ""
 
 	for scanner.Scan() {
@@ -151,13 +165,19 @@ func lexTemplateStart(scanner scanner) []token {
 		template += line
 	}
 
+	templateStartLine := *lineNo
+	templateContentLine := templateStartLine + 1
+	(*lineNo) += 2
+
 	return []token{
 		token{
-			typ: templateStart,
+			typ:  templateStart,
+			line: templateStartLine,
 		},
 		token{
 			typ:   templateContent,
 			value: template,
+			line:  templateContentLine,
 		},
 	}
 }
