@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/mrombout/solorpg/dice"
 )
@@ -15,8 +15,8 @@ func main() {
 		diceNotation = os.Args[1]
 	}
 
-	seed := time.Now().UTC().UnixNano()
-	result, err := dice.Roll(diceNotation, seed)
+	rng := rand.New(rand.NewSource(0))
+	result, err := dice.Roll(rng, diceNotation)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
