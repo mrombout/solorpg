@@ -3,8 +3,8 @@ package gimme
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
+	"os"
 	"strings"
 	"text/template"
 
@@ -31,7 +31,7 @@ type option struct {
 
 // NewGenerator creates a new generator based on the given file.
 func NewGenerator(generatorFileName string, seed int64) (Generator, error) {
-	content, err := ioutil.ReadFile(generatorFileName)
+	content, err := os.ReadFile(generatorFileName)
 	if err != nil {
 		return Generator{}, err
 	}

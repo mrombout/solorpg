@@ -34,13 +34,3 @@ type RollResult struct {
 }
 
 var emptyResult = RollResult{}
-
-type rollRequest struct {
-	DiceNotation string
-}
-
-type rollResponse struct {
-	Result int
-	Dice   []NumeralDie
-	Err    string
-}

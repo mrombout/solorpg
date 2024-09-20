@@ -1,25 +1,27 @@
 package gimme
 
-import "strings"
-import "unicode"
-import "unicode/utf8"
-import "regexp"
+import (
+	"regexp"
+	"strings"
+	"unicode"
+	"unicode/utf8"
+)
 
 type tokenType int
 
 const (
 	tokenError              tokenType = 0
-	tableStart                        = 1
-	diceNotationStart                 = 2
-	diceNotationEnd                   = 3
-	text                              = 4
-	variableAssignmentStart           = 5
-	variableAssignmentEnd             = 6
-	optionNumber                      = 7
-	diceNotation                      = 8
-	ident                             = 9
-	templateStart                     = 10
-	templateContent                   = 11
+	tableStart              tokenType = 1
+	diceNotationStart       tokenType = 2
+	diceNotationEnd         tokenType = 3
+	text                    tokenType = 4
+	variableAssignmentStart tokenType = 5
+	variableAssignmentEnd   tokenType = 6
+	optionNumber            tokenType = 7
+	diceNotation            tokenType = 8
+	ident                   tokenType = 9
+	templateStart           tokenType = 10
+	templateContent         tokenType = 11
 )
 
 type scanner interface {
@@ -32,11 +34,6 @@ type token struct {
 	typ   tokenType
 	value string
 	line  int
-}
-
-var emptyToken = token{
-	typ:   tokenError,
-	value: "",
 }
 
 var tableDefinitionRegex = regexp.MustCompile(`(table: )\((.*)\) (.*) \[(.*)\]`)
@@ -59,10 +56,7 @@ func lex(scanner scanner) ([]token, error) {
 			currentTokens = lexTemplateStart(scanner, &lineNo)
 		}
 
-		for _, currentToken := range currentTokens {
-			//currentToken.line = lineNo
-			tokens = append(tokens, currentToken)
-		}
+		tokens = append(tokens, currentTokens...)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -87,38 +81,38 @@ func lexTableDefinition(line string, lineNo *int) []token {
 	(*lineNo)++
 
 	return []token{
-		token{
+		{
 			typ:  tableStart,
 			line: currentLine,
 		},
-		token{
+		{
 			typ:  diceNotationStart,
 			line: currentLine,
 		},
-		token{
+		{
 			typ:   diceNotation,
 			value: string(diceNotationVal),
 			line:  currentLine,
 		},
-		token{
+		{
 			typ:  diceNotationEnd,
 			line: currentLine,
 		},
-		token{
+		{
 			typ:   text,
 			value: string(tableName),
 			line:  currentLine,
 		},
-		token{
+		{
 			typ:  variableAssignmentStart,
 			line: currentLine,
 		},
-		token{
+		{
 			typ:   ident,
 			value: string(variableName),
 			line:  currentLine,
 		},
-		token{
+		{
 			typ:  variableAssignmentEnd,
 			line: currentLine,
 		},
@@ -140,12 +134,12 @@ func lexTableOption(line string, lineNo *int) []token {
 	(*lineNo)++
 
 	return []token{
-		token{
+		{
 			typ:   optionNumber,
 			value: string(optionNumberVal),
 			line:  currentLine,
 		},
-		token{
+		{
 			typ:   text,
 			value: string(optionText),
 			line:  currentLine,
@@ -170,11 +164,11 @@ func lexTemplateStart(scanner scanner, lineNo *int) []token {
 	(*lineNo) += 2
 
 	return []token{
-		token{
+		{
 			typ:  templateStart,
 			line: templateStartLine,
 		},
-		token{
+		{
 			typ:   templateContent,
 			value: template,
 			line:  templateContentLine,

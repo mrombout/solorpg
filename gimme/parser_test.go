@@ -20,10 +20,10 @@ func TestTokenStackPeekReturnsFirstToken(t *testing.T) {
 	var expectedToken tokenType = text
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{
+			{
 				typ: text,
 			},
-			token{
+			{
 				typ: variableAssignmentStart,
 			},
 		},
@@ -53,10 +53,10 @@ func TestTokenStackPopRemovesAndReturnsFirstToken(t *testing.T) {
 	var expectedSecondToken tokenType = ident
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{
+			{
 				typ: expectedFirstToken,
 			},
-			token{
+			{
 				typ: expectedSecondToken,
 			},
 		},
@@ -79,7 +79,7 @@ func TestTokenStackPopRemovesAndReturnsFirstToken(t *testing.T) {
 func TestAcceptTokenReturnsErrorWhenTokenIsUnexpected(t *testing.T) {
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{
+			{
 				typ: text,
 			},
 		},
@@ -95,7 +95,7 @@ func TestAcceptTokenReturnsFirstWhenTokenIsExpected(t *testing.T) {
 	var expectedTokenType tokenType = text
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{
+			{
 				typ: expectedTokenType,
 			},
 		},
@@ -116,8 +116,8 @@ func TestParseTemplateValid(t *testing.T) {
 	generator := Generator{}
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{typ: templateStart},
-			token{typ: templateContent, value: `{{.SomeValue}}`},
+			{typ: templateStart},
+			{typ: templateContent, value: `{{.SomeValue}}`},
 		},
 	}
 
@@ -137,18 +137,18 @@ func TestParseTemplateInvalid(t *testing.T) {
 	}{
 		"missing start": {
 			tokens: []token{
-				token{typ: templateContent, value: `{{.SomeValue}}`},
+				{typ: templateContent, value: `{{.SomeValue}}`},
 			},
 		},
 		"missing content": {
 			tokens: []token{
-				token{typ: templateStart},
+				{typ: templateStart},
 			},
 		},
 		"invalid template": {
 			tokens: []token{
-				token{typ: templateStart},
-				token{typ: templateContent, value: `{{ missing moustache!`},
+				{typ: templateStart},
+				{typ: templateContent, value: `{{ missing moustache!`},
 			},
 		},
 	}
@@ -176,8 +176,8 @@ func TestParseOptionValid(t *testing.T) {
 	expectedOptionText := `Knight`
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{typ: optionNumber},
-			token{typ: text, value: expectedOptionText},
+			{typ: optionNumber},
+			{typ: text, value: expectedOptionText},
 		},
 	}
 
@@ -197,12 +197,12 @@ func TestParseOptionInvalid(t *testing.T) {
 	}{
 		"missing number": {
 			tokens: []token{
-				token{typ: text, value: "Lorum ipsum dolor sit amet."},
+				{typ: text, value: "Lorum ipsum dolor sit amet."},
 			},
 		},
 		"missing text": {
 			tokens: []token{
-				token{typ: optionNumber},
+				{typ: optionNumber},
 			},
 		},
 	}
@@ -230,10 +230,10 @@ func TestParseOptionsValid(t *testing.T) {
 	expectedOptionText2 := `Thief`
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{typ: optionNumber},
-			token{typ: text, value: expectedOptionText1},
-			token{typ: optionNumber},
-			token{typ: text, value: expectedOptionText2},
+			{typ: optionNumber},
+			{typ: text, value: expectedOptionText1},
+			{typ: optionNumber},
+			{typ: text, value: expectedOptionText2},
 		},
 	}
 
@@ -259,10 +259,10 @@ func TestParseOptionsInvalid(t *testing.T) {
 	}{
 		"wrong text token": {
 			tokens: []token{
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: ident, value: `Mage`},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: ident, value: `Mage`},
 			},
 		},
 	}
@@ -288,18 +288,18 @@ func TestParseTableValid(t *testing.T) {
 	parser := NewParser(nil)
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{typ: tableStart},
-			token{typ: diceNotationStart},
-			token{typ: diceNotation, value: `1d6`},
-			token{typ: diceNotationEnd},
-			token{typ: text, value: `The NPC is a...`},
-			token{typ: variableAssignmentStart},
-			token{typ: ident, value: `occupation`},
-			token{typ: variableAssignmentEnd},
-			token{typ: optionNumber},
-			token{typ: text, value: `Knight`},
-			token{typ: optionNumber},
-			token{typ: text, value: `Mage`},
+			{typ: tableStart},
+			{typ: diceNotationStart},
+			{typ: diceNotation, value: `1d6`},
+			{typ: diceNotationEnd},
+			{typ: text, value: `The NPC is a...`},
+			{typ: variableAssignmentStart},
+			{typ: ident, value: `occupation`},
+			{typ: variableAssignmentEnd},
+			{typ: optionNumber},
+			{typ: text, value: `Knight`},
+			{typ: optionNumber},
+			{typ: text, value: `Mage`},
 		},
 	}
 
@@ -318,91 +318,91 @@ func TestParseTableInvalid(t *testing.T) {
 	}{
 		"missing table start": {
 			tokens: []token{
-				token{typ: diceNotation, value: `1d6`},
-				token{typ: text, value: `The NPC is a...`},
-				token{typ: variableAssignmentStart},
-				token{typ: ident, value: `occupation`},
-				token{typ: variableAssignmentEnd},
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Mage`},
+				{typ: diceNotation, value: `1d6`},
+				{typ: text, value: `The NPC is a...`},
+				{typ: variableAssignmentStart},
+				{typ: ident, value: `occupation`},
+				{typ: variableAssignmentEnd},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: text, value: `Mage`},
 			},
 		},
 		"missing dice notation": {
 			tokens: []token{
-				token{typ: tableStart},
-				token{typ: text, value: `The NPC is a...`},
-				token{typ: variableAssignmentStart},
-				token{typ: ident, value: `occupation`},
-				token{typ: variableAssignmentEnd},
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Mage`},
+				{typ: tableStart},
+				{typ: text, value: `The NPC is a...`},
+				{typ: variableAssignmentStart},
+				{typ: ident, value: `occupation`},
+				{typ: variableAssignmentEnd},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: text, value: `Mage`},
 			},
 		},
 		"missing text": {
 			tokens: []token{
-				token{typ: tableStart},
-				token{typ: diceNotation, value: `1d6`},
-				token{typ: variableAssignmentStart},
-				token{typ: ident, value: `occupation`},
-				token{typ: variableAssignmentEnd},
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Mage`},
+				{typ: tableStart},
+				{typ: diceNotation, value: `1d6`},
+				{typ: variableAssignmentStart},
+				{typ: ident, value: `occupation`},
+				{typ: variableAssignmentEnd},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: text, value: `Mage`},
 			},
 		},
 		"missing variable assignment start": {
 			tokens: []token{
-				token{typ: tableStart},
-				token{typ: diceNotation, value: `1d6`},
-				token{typ: text, value: `The NPC is a...`},
-				token{typ: ident, value: `occupation`},
-				token{typ: variableAssignmentEnd},
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Mage`},
+				{typ: tableStart},
+				{typ: diceNotation, value: `1d6`},
+				{typ: text, value: `The NPC is a...`},
+				{typ: ident, value: `occupation`},
+				{typ: variableAssignmentEnd},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: text, value: `Mage`},
 			},
 		},
 		"missing variable ident": {
 			tokens: []token{
-				token{typ: tableStart},
-				token{typ: diceNotation, value: `1d6`},
-				token{typ: text, value: `The NPC is a...`},
-				token{typ: variableAssignmentStart},
-				token{typ: variableAssignmentEnd},
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Mage`},
+				{typ: tableStart},
+				{typ: diceNotation, value: `1d6`},
+				{typ: text, value: `The NPC is a...`},
+				{typ: variableAssignmentStart},
+				{typ: variableAssignmentEnd},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: text, value: `Mage`},
 			},
 		},
 		"missing variable assignment end": {
 			tokens: []token{
-				token{typ: tableStart},
-				token{typ: diceNotation, value: `1d6`},
-				token{typ: text, value: `The NPC is a...`},
-				token{typ: variableAssignmentStart},
-				token{typ: ident, value: `occupation`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Mage`},
+				{typ: tableStart},
+				{typ: diceNotation, value: `1d6`},
+				{typ: text, value: `The NPC is a...`},
+				{typ: variableAssignmentStart},
+				{typ: ident, value: `occupation`},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: text, value: `Mage`},
 			},
 		},
 		"missing options text": {
 			tokens: []token{
-				token{typ: tableStart},
-				token{typ: diceNotation, value: `1d6`},
-				token{typ: text, value: `The NPC is a...`},
-				token{typ: variableAssignmentStart},
-				token{typ: ident, value: `occupation`},
-				token{typ: variableAssignmentEnd},
-				token{typ: optionNumber},
+				{typ: tableStart},
+				{typ: diceNotation, value: `1d6`},
+				{typ: text, value: `The NPC is a...`},
+				{typ: variableAssignmentStart},
+				{typ: ident, value: `occupation`},
+				{typ: variableAssignmentEnd},
+				{typ: optionNumber},
 			},
 		},
 	}
@@ -429,30 +429,30 @@ func TestParseTablesValid(t *testing.T) {
 	generator := Generator{}
 	tokenStack := tokenStack{
 		tokens: []token{
-			token{typ: tableStart},
-			token{typ: diceNotationStart},
-			token{typ: diceNotation, value: `1d6`},
-			token{typ: diceNotationEnd},
-			token{typ: text, value: `The NPC is a...`},
-			token{typ: variableAssignmentStart},
-			token{typ: ident, value: `occupation`},
-			token{typ: variableAssignmentEnd},
-			token{typ: optionNumber},
-			token{typ: text, value: `Knight`},
-			token{typ: optionNumber},
-			token{typ: text, value: `Mage`},
-			token{typ: tableStart},
-			token{typ: diceNotationStart},
-			token{typ: diceNotation, value: `1d6`},
-			token{typ: diceNotationEnd},
-			token{typ: text, value: `The NPC is a...`},
-			token{typ: variableAssignmentStart},
-			token{typ: ident, value: `occupation`},
-			token{typ: variableAssignmentEnd},
-			token{typ: optionNumber},
-			token{typ: text, value: `Knight`},
-			token{typ: optionNumber},
-			token{typ: text, value: `Mage`},
+			{typ: tableStart},
+			{typ: diceNotationStart},
+			{typ: diceNotation, value: `1d6`},
+			{typ: diceNotationEnd},
+			{typ: text, value: `The NPC is a...`},
+			{typ: variableAssignmentStart},
+			{typ: ident, value: `occupation`},
+			{typ: variableAssignmentEnd},
+			{typ: optionNumber},
+			{typ: text, value: `Knight`},
+			{typ: optionNumber},
+			{typ: text, value: `Mage`},
+			{typ: tableStart},
+			{typ: diceNotationStart},
+			{typ: diceNotation, value: `1d6`},
+			{typ: diceNotationEnd},
+			{typ: text, value: `The NPC is a...`},
+			{typ: variableAssignmentStart},
+			{typ: ident, value: `occupation`},
+			{typ: variableAssignmentEnd},
+			{typ: optionNumber},
+			{typ: text, value: `Knight`},
+			{typ: optionNumber},
+			{typ: text, value: `Mage`},
 		},
 	}
 
@@ -473,25 +473,25 @@ func TestParseTablesInvalid(t *testing.T) {
 		"invalid second table": {
 			generator: Generator{},
 			tokens: []token{
-				token{typ: tableStart},
-				token{typ: diceNotation, value: `1d6`},
-				token{typ: text, value: `The NPC is a...`},
-				token{typ: variableAssignmentStart},
-				token{typ: ident, value: `occupation`},
-				token{typ: variableAssignmentEnd},
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Mage`},
-				token{typ: tableStart},
-				token{typ: diceNotation, value: `1d6`},
-				token{typ: text, value: `The NPC is a...`},
-				token{typ: ident, value: `occupation`},
-				token{typ: variableAssignmentEnd},
-				token{typ: optionNumber},
-				token{typ: text, value: `Knight`},
-				token{typ: optionNumber},
-				token{typ: text, value: `Mage`},
+				{typ: tableStart},
+				{typ: diceNotation, value: `1d6`},
+				{typ: text, value: `The NPC is a...`},
+				{typ: variableAssignmentStart},
+				{typ: ident, value: `occupation`},
+				{typ: variableAssignmentEnd},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: text, value: `Mage`},
+				{typ: tableStart},
+				{typ: diceNotation, value: `1d6`},
+				{typ: text, value: `The NPC is a...`},
+				{typ: ident, value: `occupation`},
+				{typ: variableAssignmentEnd},
+				{typ: optionNumber},
+				{typ: text, value: `Knight`},
+				{typ: optionNumber},
+				{typ: text, value: `Mage`},
 			},
 		},
 	}
@@ -516,32 +516,32 @@ func TestParseTablesInvalid(t *testing.T) {
 func TestParseValid(t *testing.T) {
 	parser := NewParser(nil)
 	tokens := []token{
-		token{typ: tableStart},
-		token{typ: diceNotationStart},
-		token{typ: diceNotation, value: `1d6`},
-		token{typ: diceNotationEnd},
-		token{typ: text, value: `The NPC is a...`},
-		token{typ: variableAssignmentStart},
-		token{typ: ident, value: `occupation`},
-		token{typ: variableAssignmentEnd},
-		token{typ: optionNumber},
-		token{typ: text, value: `Knight`},
-		token{typ: optionNumber},
-		token{typ: text, value: `Mage`},
-		token{typ: tableStart},
-		token{typ: diceNotationStart},
-		token{typ: diceNotation, value: `1d6`},
-		token{typ: diceNotationEnd},
-		token{typ: text, value: `The NPC is a...`},
-		token{typ: variableAssignmentStart},
-		token{typ: ident, value: `occupation`},
-		token{typ: variableAssignmentEnd},
-		token{typ: optionNumber},
-		token{typ: text, value: `Knight`},
-		token{typ: optionNumber},
-		token{typ: text, value: `Mage`},
-		token{typ: templateStart},
-		token{typ: templateContent, value: `TODO: Actually fill a template`},
+		{typ: tableStart},
+		{typ: diceNotationStart},
+		{typ: diceNotation, value: `1d6`},
+		{typ: diceNotationEnd},
+		{typ: text, value: `The NPC is a...`},
+		{typ: variableAssignmentStart},
+		{typ: ident, value: `occupation`},
+		{typ: variableAssignmentEnd},
+		{typ: optionNumber},
+		{typ: text, value: `Knight`},
+		{typ: optionNumber},
+		{typ: text, value: `Mage`},
+		{typ: tableStart},
+		{typ: diceNotationStart},
+		{typ: diceNotation, value: `1d6`},
+		{typ: diceNotationEnd},
+		{typ: text, value: `The NPC is a...`},
+		{typ: variableAssignmentStart},
+		{typ: ident, value: `occupation`},
+		{typ: variableAssignmentEnd},
+		{typ: optionNumber},
+		{typ: text, value: `Knight`},
+		{typ: optionNumber},
+		{typ: text, value: `Mage`},
+		{typ: templateStart},
+		{typ: templateContent, value: `TODO: Actually fill a template`},
 	}
 
 	generator, err := parser.Parse(tokens)

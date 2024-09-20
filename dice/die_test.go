@@ -2,6 +2,7 @@ package dice
 
 import (
 	"math/rand"
+	"strconv"
 	"testing"
 )
 
@@ -17,7 +18,7 @@ func TestDiceRoll(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		t.Run(string(testCase.die.Faces), func(t *testing.T) {
+		t.Run(strconv.Itoa(testCase.die.Faces), func(t *testing.T) {
 			rng := rand.New(rand.NewSource(testCase.seed))
 			actualRoll := testCase.die.Roll(rng)
 			if actualRoll != testCase.expectedRoll {

@@ -15,24 +15,24 @@ func TestGenerate(t *testing.T) {
 
 	generator := Generator{
 		tables: []table{
-			table{
+			{
 				diceSet: []dice.NumeralDie{
-					dice.NumeralDie{Faces: 2},
+					{Faces: 2},
 				},
 				options: []option{
-					option{text: "orcish"},
-					option{text: "dwarven"},
+					{text: "orcish"},
+					{text: "dwarven"},
 				},
 				text:         "The NPC is...",
 				variableName: "race",
 			},
-			table{
+			{
 				diceSet: []dice.NumeralDie{
-					dice.NumeralDie{Faces: 2},
+					{Faces: 2},
 				},
 				options: []option{
-					option{text: "warrior"},
-					option{text: "paladin"},
+					{text: "warrior"},
+					{text: "paladin"},
 				},
 				text:         "The NPC's occupation is...",
 				variableName: "occupation",

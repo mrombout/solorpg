@@ -11,7 +11,7 @@ import (
 func TestRollMany(t *testing.T) {
 	// Arrange
 	rng := rand.New(rand.NewSource(0))
-	diceSet := []NumeralDie{NumeralDie{Faces: 6}, NumeralDie{Faces: 6}}
+	diceSet := []NumeralDie{{Faces: 6}, {Faces: 6}}
 
 	// Act
 	result := RollMany(rng, diceSet)
